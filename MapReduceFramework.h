@@ -1,9 +1,5 @@
 #ifndef MAPREDUCEFRAMEWORK_H
 #define MAPREDUCEFRAMEWORK_H
-#include <pthread.h>
-#include <cstdio>
-#include <atomic>
-#include <iostream>
 
 #include "MapReduceClient.h"
 
