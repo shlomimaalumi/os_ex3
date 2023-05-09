@@ -1,8 +1,8 @@
 #include <pthread.h>
 #include <cstdio>
 #include <atomic>
-
-#define MT_LEVEL 5
+#include <stdlib.h>
+#define MT_LEVEL 10
 
 struct ThreadContext {
     std::atomic<int>* atomic_counter;
@@ -13,7 +13,7 @@ struct ThreadContext {
 void* foo(void* arg)
 {
     ThreadContext* tc = (ThreadContext*) arg;
-    
+
     for (int i = 0; i < 1000; ++i) {
         // old_value isn't used in this example, but will be necessary
         // in the exercise
@@ -21,7 +21,7 @@ void* foo(void* arg)
         (void) old_value;  // ignore not used warning
         (*(tc->bad_counter))++;
     }
-    
+
     return 0;
 }
 

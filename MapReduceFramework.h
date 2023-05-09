@@ -1,5 +1,9 @@
 #ifndef MAPREDUCEFRAMEWORK_H
 #define MAPREDUCEFRAMEWORK_H
+#include <pthread.h>
+#include <cstdio>
+#include <atomic>
+#include <iostream>
 
 #include "MapReduceClient.h"
 
@@ -66,6 +70,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     program with the completion of the MapReduce job.
 */
 void waitForJob(JobHandle job);
+
 /*
     Description: getJobState is a function that retrieves the current state of the
     specified MapReduce job (job) and stores it in the provided JobState structure
