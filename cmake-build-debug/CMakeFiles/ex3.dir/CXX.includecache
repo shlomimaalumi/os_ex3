@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/Atomic/atomicdemo.cpp
+pthread.h
+-
+cstdio
+-
+atomic
+-
+

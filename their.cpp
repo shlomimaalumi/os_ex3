@@ -1,6 +1,3 @@
-
-
-
 #include "MapReduceFramework.h"
 #include <sys/time.h>
 #include <iostream>
@@ -623,3 +620,6 @@ OUT_ITEMS_LIST runMapReduceFramework(MapReduceBase &mapReduce,
 
 	return mappedAndReducedList;
 }
+
+
+
