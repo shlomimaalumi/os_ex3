@@ -112,6 +112,41 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 }
 
 
+
+//void *reduce_phase(void *context) {
+//    ThreadContext *t_context = (ThreadContext *) context;
+//
+//    // Keep processing intermediate key-value pairs until all pairs have been reduced
+//    while (true) {
+//        int currentKeyIndex = t_context->atomicCounter->fetch_add(1);
+//
+//        // Check if all keys have been processed by other threads already
+//        if (currentKeyIndex >= (int) t_context->keysVec->size()) {
+//            break;
+//        }
+//
+//        K2 *key = t_context->keysVec->at(currentKeyIndex);
+//
+//        // Collect all intermediate values associated with the current key
+//        std::vector<V2 *> valuesVec;
+//        for (int i = 0; i < t_context->intermediateVecs->size(); i++) {
+//            IntermediateVec *vec = t_context->intermediateVecs->at(i);
+//            for (int j = 0; j < vec->size(); j++) {
+//                IntermediatePair *pair = &vec->at(j);
+//                if (*(pair->first) == *key) {
+//                    valuesVec.push_back(pair->second);
+//                }
+//            }
+//        }
+//
+//        // Reduce the values and emit the final key-value pair
+//        V2 *outputValue = t_context->client->reduce(key, valuesVec, t_context);
+//    }
+//    return nullptr;
+//}
+
+
+
 void emit2(K2 *key, V2 *value, void *context) {
     ThreadContext *t_context = (ThreadContext *) context;
     IntermediatePair *pair = new IntermediatePair(key, value);
