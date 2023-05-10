@@ -1,11 +1,18 @@
 #include "MapReduceFramework.h"
 #include <pthread.h>
+#include <semaphore.h>
 #include <cstdio>
 #include <atomic>
 #include <iostream>
 #include <algorithm>
 #include <vector>  //std::vector
 #include <utility> //std::pair
+
+// ******************************************************************
+// ********************** typedefs & structs ************************
+
+// ******************************************************************
+typedef std::vector<std::queue<IntermediatePair>> ShuffledVec_t;
 
 typedef struct ThreadContext {
     const MapReduceClient *client;
@@ -24,12 +31,19 @@ typedef struct ShuffleContext {
     std::atomic<int> *atomicCounter;
     JobState *current_state;
     std::vector<IntermediateVec> *intermediate_vecs;
+    sem_t *shuffle_sem;
+    std::queue<IntermediatePair> *queues;
+    int multiThreadLevel;
 } ShuffleContext;
 
 typedef struct WaitContext {
     std::vector<pthread_t> *threads;
     int multiThreadLevel;
 } WaitContext;
+
+// ******************************************************************
+// *********************** helper functions *************************
+// ******************************************************************
 
 JobState current_state;
 
@@ -38,6 +52,26 @@ bool comparePairs(const std::pair<K2 *, V2 *> &pair1,
     return *pair1.first < *pair2.first;
 }
 
+bool operatorEqual(const std::pair<K2 *, V2 *> &pair1,
+                   const std::pair<K2 *, V2 *> &pair2) {
+    return (not comparePairs(pair1, pair2)) and (not comparePairs(pair2, pair1));
+}
+
+int min_key_ind(std::pair<K2 *, V2 *> *min_list, std::list<int> ind_list) {
+    auto min1 = min_list[0];
+    int min_ind = 0;
+    for (auto i: ind_list) {
+        if (comparePairs(min1, min_list[i])) {
+            min1 = min_list[i];
+            min_ind = i;
+        }
+    }
+    return min_ind;
+}
+
+// ******************************************************************
+// *********************** map phase function ***********************
+// ******************************************************************
 
 void *map_phase(void *context) {
     ThreadContext *t_context = (ThreadContext *) context;
@@ -74,11 +108,13 @@ void shuffle_phase(ShuffleContext &context) {
 }
 
 
+// ******************************************************************
+// *********************** reduce phase function ********************
+// ******************************************************************
+
 void *reduce_phase(void *context) {
     return nullptr;
 }
-
-
 //    ThreadContext *t_context = (ThreadContext *) context;
 //
 //    // Keep processing intermediate key-value pairs until all pairs have been reduced
@@ -110,19 +146,10 @@ void *reduce_phase(void *context) {
 //    return nullptr;
 //}
 
+// ******************************************************************
+// *********************** Framework functions **********************
+// ******************************************************************
 
-/*
- * Implement the startMapReduceJob function in MapReduceFramework.cpp.
- * This function should create the necessary threads and distribute the work among them.
- * Use the atomic variable to split the input values between the threads.
- * Call the map function on each pair and use the emit2 function to update the framework's databases.
- *
-    Description: startMapReduceJob is a function that starts the execution of a
-    MapReduce job. It takes several parameters, including a reference to the
-    MapReduceClient, the input data vector (inputVec), the output data vector
-    (outputVec), and the desired level of multi-threading (multiThreadLevel).
-    The function returns a JobHandle that can be used to interact with the running job.
-*/
 JobHandle startMapReduceJob(const MapReduceClient &client,
                             const InputVec &inputVec, OutputVec &outputVec,
                             int multiThreadLevel) {
@@ -172,6 +199,9 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
     // Update the job state to the shuffle phase
     current_state.stage = SHUFFLE_STAGE;
+    sem_t shuffle_sem;
+    sem_init(&shuffle_sem, 0, 0);
+    std::queue<IntermediatePair> queues[multiThreadLevel];
     ShuffleContext shuffle_context = {
             &mutex,
             &atomicCounter,
@@ -181,6 +211,23 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     // NOW perform the shuffle phase:
     shuffle_phase(shuffle_context);
 
+     // create a new thread for the shuffle
+    pthread_t shuffle_thread;
+
+    if (pthread_create(&shuffle_thread, NULL, shuffle_phase,
+                       (void *) &shuffle_context)) {
+        std::cerr << "Error creating thread" << std::endl;
+        exit(1);
+    }
+
+    sem_wait(&shuffle_sem);
+     for (int i = 0; i < multiThreadLevel; i++) {
+        if (not queues[i].empty()) {
+            shuffled_vec.push_back(queues[i]);
+        }
+    }
+
+    // Wait for shuffle thread to finish
     // Update the job state to the reduce phase
     current_state.stage = REDUCE_STAGE;
 
@@ -189,7 +236,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
     // an array to store all the context for each thread
     ThreadContext reduce_threads_context[multiThreadLevel];
-
+    // TODO: check if need to run with the same threads from the map or create new as we did
     for (int i = 0; i < multiThreadLevel; ++i) {
         reduce_threads_context[i] = {&client,
                                      &inputVec,
@@ -215,10 +262,10 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
     // Free resources
     pthread_mutex_destroy(&mutex);
+    sem_destroy(&shuffle_sem);
     // TODO: CHECK WHAT TO send to this function
 
     //    closeJobHandle();
-
 
     // TODO: CHECK WHAT TO RETURN AND MAYBE CHANGE THE current_state variable
     return NULL;

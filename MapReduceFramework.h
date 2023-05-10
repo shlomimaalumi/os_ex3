@@ -82,5 +82,30 @@ void getJobState(JobHandle job, JobState *state);
 */
 void closeJobHandle(JobHandle job);
 
+/*
+ * shuffle phase function:
+1.Create a queue to store the new sequences of (k2, v2) where all keys are identical
+ and all elements with a given key are in a single sequence.
+ This can be implemented as a vector of vectors.
+
+2. Create an atomic counter to count the number of vectors in the queue.
+ Initialize it to 0.
+
+3. Create a single Shuffle thread (thread 0) to handle the shuffle phase.
+ All other threads will wait until the shuffle phase is over.
+
+4. In the Shuffle thread, loop through each intermediate vector in reverse order
+ (from the back to the front) and pop the elements one by one.
+
+5. For each popped element, insert it into the appropriate vector in the queue based on its key.
+
+6. After inserting an element into the queue, check the atomic counter and increment it by 1.
+
+7. Repeat steps 4-6 until all intermediary vectors are empty.
+
+8. Once the shuffle phase is complete, signal the other threads to continue to the Reduce phase using a semaphore.
+
+Note: To ensure thread safety, appropriate synchronization mechanisms such as mutex
+locks and semaphores should be used when accessing shared resources such as the queue and atomic counter.
 
 #endif //MAPREDUCEFRAMEWORK_H
