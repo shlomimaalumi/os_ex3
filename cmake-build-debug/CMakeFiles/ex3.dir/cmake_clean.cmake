@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ex3.dir/MapReduceFramework.cpp.o"
-  "CMakeFiles/ex3.dir/tests/test1.cpp.o"
+  "CMakeFiles/ex3.dir/testsoldd/test1.cpp.o"
   "ex3"
   "ex3.pdb"
 )

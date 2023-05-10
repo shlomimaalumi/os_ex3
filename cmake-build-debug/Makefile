@@ -150,32 +150,32 @@ MapReduceFramework.cpp.s:
 	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/MapReduceFramework.cpp.s
 .PHONY : MapReduceFramework.cpp.s
 
-tests/test1.o: tests/test1.cpp.o
+testsoldd/test1.o: testsoldd/test1.cpp.o
 
-.PHONY : tests/test1.o
+.PHONY : testsoldd/test1.o
 
 # target to build an object file
-tests/test1.cpp.o:
-	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/tests/test1.cpp.o
-.PHONY : tests/test1.cpp.o
+testsoldd/test1.cpp.o:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/testsoldd/test1.cpp.o
+.PHONY : testsoldd/test1.cpp.o
 
-tests/test1.i: tests/test1.cpp.i
+testsoldd/test1.i: testsoldd/test1.cpp.i
 
-.PHONY : tests/test1.i
+.PHONY : testsoldd/test1.i
 
 # target to preprocess a source file
-tests/test1.cpp.i:
-	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/tests/test1.cpp.i
-.PHONY : tests/test1.cpp.i
+testsoldd/test1.cpp.i:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/testsoldd/test1.cpp.i
+.PHONY : testsoldd/test1.cpp.i
 
-tests/test1.s: tests/test1.cpp.s
+testsoldd/test1.s: testsoldd/test1.cpp.s
 
-.PHONY : tests/test1.s
+.PHONY : testsoldd/test1.s
 
 # target to generate assembly for a file
-tests/test1.cpp.s:
-	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/tests/test1.cpp.s
-.PHONY : tests/test1.cpp.s
+testsoldd/test1.cpp.s:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/testsoldd/test1.cpp.s
+.PHONY : testsoldd/test1.cpp.s
 
 # Help Target
 help:
@@ -189,9 +189,9 @@ help:
 	@echo "... MapReduceFramework.o"
 	@echo "... MapReduceFramework.i"
 	@echo "... MapReduceFramework.s"
-	@echo "... tests/test1.o"
-	@echo "... tests/test1.i"
-	@echo "... tests/test1.s"
+	@echo "... testsoldd/test1.o"
+	@echo "... testsoldd/test1.i"
+	@echo "... testsoldd/test1.s"
 .PHONY : help
 
 

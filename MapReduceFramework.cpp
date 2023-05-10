@@ -21,7 +21,7 @@ typedef struct ThreadContext {
     const MapReduceClient *client;
     const InputVec *input_vec;
     IntermediateVec *intermediate_vec;
-    ShuffledQueue_t *shuffled_vec;
+    ShuffledQueue_t *shuffled_queue;
     OutputVec *output_vec;
     pthread_mutex_t *mutex;
     std::atomic<int> *atomicCounter;
@@ -170,11 +170,11 @@ void *reduce_phase(void *context) {
             break;
         }
         pthread_mutex_unlock(t_context->mutex);
-//        for
-//        IntermediatePair pair = (t_context->input_vec)->at(currentIndex);
         // TODO: CHECK IF NEED TO lock the mutex because use the input vector
         pthread_mutex_lock(t_context->mutex);
-//        t_context->client->map(pair.first, pair.second, (void *) t_context);
+        const IntermediateVec vec=t_context->shuffled_queue->front();
+        t_context->shuffled_queue->pop();
+        t_context->client->reduce(&vec,context);
         pthread_mutex_unlock(t_context->mutex);
     }
     return nullptr;
@@ -314,15 +314,20 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
 
 void emit2(K2 *key, V2 *value, void *context) {
+//    pthread_mutex_lock(t_context->mutex);
     ThreadContext *t_context = (ThreadContext *) context;
     IntermediatePair *pair = new IntermediatePair(key, value);
-    pthread_mutex_lock(t_context->mutex);
     t_context->intermediate_vec->push_back(*pair);
-    pthread_mutex_unlock(t_context->mutex);
+//    pthread_mutex_unlock(t_context->mutex);
 }
 
 
-void emit3(K3 *key, V3 *value, void *context) {}
+void emit3(K3 *key, V3 *value, void *context)
+{
+    ThreadContext *t_context = (ThreadContext *) context;
+    OutputPair *pair=new OutputPair(key,value);
+    t_context->output_vec->push_back(*pair);
+}
 
 
 void waitForJob(JobHandle job) {

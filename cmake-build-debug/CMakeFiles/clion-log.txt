@@ -1,4 +1,28 @@
 C:\windows\system32\wsl.exe --distribution Ubuntu --exec /bin/bash -c "export CMAKE_COLOR_DIAGNOSTICS=ON && export CLION_IDE=TRUE && export JETBRAINS_IDE=TRUE && cd /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug && /usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G 'CodeBlocks - Unix Makefiles' -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3 -B /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug"
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
 -- Configuring done
 -- Generating done
--- Build files have been written to: /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug
+-- Build files have been written to: /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/mattanTests/googletest-download
+[ 11%] Performing download step (git clone) for 'googletest'
+Cloning into 'googletest-src'...
+fatal: invalid reference: master
+CMake Error at googletest-download/googletest-prefix/tmp/googletest-gitclone.cmake:40 (message):
+  Failed to checkout tag: 'master'
+
+
+make[2]: *** [CMakeFiles/googletest.dir/build.make:92: googletest-prefix/src/googletest-stamp/googletest-download] Error 1
+make[1]: *** [CMakeFiles/Makefile2:76: CMakeFiles/googletest.dir/all] Error 2
+make: *** [Makefile:84: all] Error 2
+CMake Error at mattanTests/CMakeLists.txt:21 (message):
+  Build step for googletest failed: 2
+
+
+-- Configuring incomplete, errors occurred!
+See also "/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles/CMakeError.log".

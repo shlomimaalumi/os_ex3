@@ -70,29 +70,29 @@ CMakeFiles/ex3.dir/MapReduceFramework.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex3.dir/MapReduceFramework.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.cpp -o CMakeFiles/ex3.dir/MapReduceFramework.cpp.s
 
-CMakeFiles/ex3.dir/tests/test1.cpp.o: CMakeFiles/ex3.dir/flags.make
-CMakeFiles/ex3.dir/tests/test1.cpp.o: ../tests/test1.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ex3.dir/tests/test1.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ex3.dir/tests/test1.cpp.o -c /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp
+CMakeFiles/ex3.dir/testsoldd/test1.cpp.o: CMakeFiles/ex3.dir/flags.make
+CMakeFiles/ex3.dir/testsoldd/test1.cpp.o: ../testsoldd/test1.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ex3.dir/testsoldd/test1.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ex3.dir/testsoldd/test1.cpp.o -c /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/testsoldd/test1.cpp
 
-CMakeFiles/ex3.dir/tests/test1.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex3.dir/tests/test1.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp > CMakeFiles/ex3.dir/tests/test1.cpp.i
+CMakeFiles/ex3.dir/testsoldd/test1.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex3.dir/testsoldd/test1.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/testsoldd/test1.cpp > CMakeFiles/ex3.dir/testsoldd/test1.cpp.i
 
-CMakeFiles/ex3.dir/tests/test1.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex3.dir/tests/test1.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp -o CMakeFiles/ex3.dir/tests/test1.cpp.s
+CMakeFiles/ex3.dir/testsoldd/test1.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex3.dir/testsoldd/test1.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/testsoldd/test1.cpp -o CMakeFiles/ex3.dir/testsoldd/test1.cpp.s
 
 # Object files for target ex3
 ex3_OBJECTS = \
 "CMakeFiles/ex3.dir/MapReduceFramework.cpp.o" \
-"CMakeFiles/ex3.dir/tests/test1.cpp.o"
+"CMakeFiles/ex3.dir/testsoldd/test1.cpp.o"
 
 # External object files for target ex3
 ex3_EXTERNAL_OBJECTS =
 
 ex3: CMakeFiles/ex3.dir/MapReduceFramework.cpp.o
-ex3: CMakeFiles/ex3.dir/tests/test1.cpp.o
+ex3: CMakeFiles/ex3.dir/testsoldd/test1.cpp.o
 ex3: CMakeFiles/ex3.dir/build.make
 ex3: CMakeFiles/ex3.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ex3"

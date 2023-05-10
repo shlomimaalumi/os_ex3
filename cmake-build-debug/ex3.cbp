@@ -88,7 +88,7 @@
 		<Unit filename="/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.h">
 			<Option target="ex3"/>
 		</Unit>
-		<Unit filename="/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp">
+		<Unit filename="/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/testsoldd/test1.cpp">
 			<Option target="ex3"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/CMakeLists.txt">
