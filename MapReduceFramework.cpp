@@ -15,19 +15,20 @@
 // ********************** typedefs & structs ************************
 
 // ******************************************************************
-typedef std::vector<std::queue<IntermediatePair>> ShuffledVec_t;
+typedef std::queue<std::vector<IntermediatePair>> ShuffledQueue_t;
 
 typedef struct ThreadContext {
     const MapReduceClient *client;
     const InputVec *input_vec;
     IntermediateVec *intermediate_vec;
-    ShuffledVec_t *shuffled_vec;
+    ShuffledQueue_t *shuffled_vec;
     OutputVec *output_vec;
     pthread_mutex_t *mutex;
     std::atomic<int> *atomicCounter;
     int multiThreadLevel;
     JobState *current_state;
     std::vector<IntermediateVec> *intermediate_vecs;
+    int key_count;
 } ThreadContext;
 
 typedef struct ShuffleContext {
@@ -36,7 +37,7 @@ typedef struct ShuffleContext {
     JobState *current_state;
     std::vector<IntermediateVec> *intermediate_vecs;
     sem_t *shuffle_sem;
-    std::queue<IntermediatePair> *queues;
+    ShuffledQueue_t *queue;
     int multiThreadLevel;
 } ShuffleContext;
 
@@ -84,18 +85,19 @@ void *map_phase(void *context) {
     int progress_percentage = (int) (100 * processed_count / input_size);
 
     while (true) {
-        int currentIndex = t_context->atomicCounter->fetch_add(1);
         pthread_mutex_lock(t_context->mutex);
+        int currentIndex = t_context->atomicCounter->fetch_add(1);
         if (currentIndex >= (int) t_context->input_vec->size()) {
             pthread_mutex_unlock(t_context->mutex);
             break;
         }
         pthread_mutex_unlock(t_context->mutex);
 
-        std::pair<K1 *, V1 *> pair = (t_context->input_vec)->at(currentIndex);
-
+        InputPair pair = (t_context->input_vec)->at(currentIndex);
         // TODO: CHECK IF NEED TO lock the mutex because use the input vector
+        pthread_mutex_lock(t_context->mutex);
         t_context->client->map(pair.first, pair.second, (void *) t_context);
+        pthread_mutex_unlock(t_context->mutex);
 
     }
     pthread_mutex_lock(t_context->mutex);
@@ -128,16 +130,16 @@ void* shuffle_phase(void* context_t) {
     auto first_ind = min_key_ind(minlist, available_ind);
     auto last = context.intermediate_vecs->at(first_ind).at(
             min_lists_ind[first_ind]);
-    int queue_ind = 0;
+    IntermediateVec* vec = new IntermediateVec;
     while (not available_ind.empty()) {
         // get the thread which we will take the pair from, and the pair
         int min_ind = min_key_ind(minlist, available_ind);
         auto pair = context.intermediate_vecs->at(min_ind).at(
-                min_lists_ind[min_ind]);;
+                min_lists_ind[min_ind]);
         if (not operatorEqual(last, pair)) {
-            queue_ind++;
+            context.queue->push(*vec);
         }
-        context.queues[queue_ind].push(pair);
+        vec = new IntermediateVec;
 
         last = pair;
         if (++min_lists_ind[min_ind] == context.intermediate_vecs[min_ind].size()) {
@@ -155,6 +157,27 @@ void* shuffle_phase(void* context_t) {
 // ******************************************************************
 
 void *reduce_phase(void *context) {
+    ThreadContext *t_context = (ThreadContext *) context;
+    int input_size = t_context->input_vec->size();
+    std::atomic<int> processed_count(0);
+    int progress_percentage = (int) (100 * processed_count / input_size);
+
+    while (true) {
+        pthread_mutex_lock(t_context->mutex);
+        int currentIndex = t_context->atomicCounter->fetch_add(1);
+        if (currentIndex >= (int) t_context->key_count) {
+            pthread_mutex_unlock(t_context->mutex);
+            break;
+        }
+        pthread_mutex_unlock(t_context->mutex);
+//        for
+//        IntermediatePair pair = (t_context->input_vec)->at(currentIndex);
+        // TODO: CHECK IF NEED TO lock the mutex because use the input vector
+        pthread_mutex_lock(t_context->mutex);
+//        t_context->client->map(pair.first, pair.second, (void *) t_context);
+        pthread_mutex_unlock(t_context->mutex);
+
+    }
     return nullptr;
 }
 //    ThreadContext *t_context = (ThreadContext *) context;
@@ -228,7 +251,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
                                   &atomicCounter,
                                   multiThreadLevel,
                                   &current_state,
-                                  &intermediateVectors};
+                                  &intermediateVectors,0};
         if (pthread_create(&map_threads[i], NULL, map_phase,
                            (void *) &map_thread_contexts[i])) {
             std::cerr << "Error creating thread" << std::endl;
@@ -244,19 +267,19 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     current_state.stage = SHUFFLE_STAGE;
     sem_t shuffle_sem;
     sem_init(&shuffle_sem, 0, 0);
-    std::queue<IntermediatePair> queues[multiThreadLevel];
+    ShuffledQueue_t *queue;
     ShuffleContext shuffle_context = {
             &mutex,
             &atomicCounter,
             &current_state,
             &intermediateVectors,
             &shuffle_sem,
-            queues,
+            queue,
             multiThreadLevel};
 
     // NOW perform the shuffle phase:
 
-    ShuffledVec_t shuffled_vec;
+//    ShuffledVec_t shuffled_vec;
 
      // create a new thread for the shuffle
     pthread_t shuffle_thread;
@@ -268,11 +291,8 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     }
 
     sem_wait(&shuffle_sem);
-     for (int i = 0; i < multiThreadLevel; i++) {
-        if (not queues[i].empty()) {
-            shuffled_vec.push_back(queues[i]);
-        }
-    }
+    int key_count=0;
+
 
     // Wait for shuffle thread to finish
     // Update the job state to the reduce phase
@@ -289,13 +309,14 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
         reduce_threads_context[i] = {&client,
                                      &inputVec,
                                      &intermediateVectors[i],
-                                     &shuffled_vec,
+                                     queue,
                                      &outputVec,
                                      &mutex,
                                      &atomicCounter,
                                      multiThreadLevel,
                                      &current_state,
-                                     &intermediateVectors};
+                                     &intermediateVectors,
+                                     key_count};
         if (pthread_create(&reduce_threads[i], NULL, reduce_phase,
                            (void *) &reduce_threads_context[i])) {
             std::cerr << "Error creating thread" << std::endl;
@@ -350,11 +371,18 @@ void getJobState(JobHandle job, JobState *state) {
 
 
 void closeJobHandle(JobHandle job) {
-    ThreadContext *t_job = (ThreadContext *) job;
+    ShuffleContext *t_job = (ShuffleContext *) job;
     for (auto vec: *(t_job->intermediate_vecs)) {
         for (auto pair: vec) {
             delete &pair;
         }
+    }
+    while(not t_job->queue->empty())
+    // TODO: check what do delete inside the vec
+    {
+        auto temp = t_job->queue->front();
+        t_job->queue->pop();
+        delete &temp;
     }
 }
 
