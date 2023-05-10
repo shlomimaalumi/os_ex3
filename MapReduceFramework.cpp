@@ -303,6 +303,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
         }
     }
 
+
     curr_wait = {&reduce_threads, multiThreadLevel};
     waitForJob(&curr_wait);
 
