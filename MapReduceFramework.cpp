@@ -176,40 +176,9 @@ void *reduce_phase(void *context) {
         pthread_mutex_lock(t_context->mutex);
 //        t_context->client->map(pair.first, pair.second, (void *) t_context);
         pthread_mutex_unlock(t_context->mutex);
-
     }
     return nullptr;
 }
-//    ThreadContext *t_context = (ThreadContext *) context;
-//
-//    // Keep processing intermediate key-value pairs until all pairs have been reduced
-//    while (true) {
-//        int currentKeyIndex = t_context->atomicCounter->fetch_add(1);
-//
-//        // Check if all keys have been processed by other threads already
-//        if (currentKeyIndex >= (int) t_context->keysVec->size()) {
-//            break;
-//        }
-//
-//        K2 *key = t_context->keysVec->at(currentKeyIndex);
-//
-//        // Collect all intermediate values associated with the current key
-//        std::vector<V2 *> valuesVec;
-//        for (int i = 0; i < t_context->intermediateVecs->size(); i++) {
-//            IntermediateVec *vec = t_context->intermediateVecs->at(i);
-//            for (int j = 0; j < vec->size(); j++) {
-//                IntermediatePair *pair = &vec->at(j);
-//                if (*(pair->first) == *key) {
-//                    valuesVec.push_back(pair->second);
-//                }
-//            }
-//        }
-//
-//        // Reduce the values and emit the final key-value pair
-//        V2 *outputValue = t_context->client->reduce(key, valuesVec, t_context);
-//    }
-//    return nullptr;
-//}
 
 // ******************************************************************
 // *********************** Framework functions **********************
@@ -251,7 +220,8 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
                                   &atomicCounter,
                                   multiThreadLevel,
                                   &current_state,
-                                  &intermediateVectors,0};
+                                  &intermediateVectors,
+                                  0};
         if (pthread_create(&map_threads[i], NULL, map_phase,
                            (void *) &map_thread_contexts[i])) {
             std::cerr << "Error creating thread" << std::endl;
@@ -279,9 +249,8 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
     // NOW perform the shuffle phase:
 
-//    ShuffledVec_t shuffled_vec;
 
-     // create a new thread for the shuffle
+    // create a new thread for the shuffle:
     pthread_t shuffle_thread;
 
     if (pthread_create(&shuffle_thread, NULL, shuffle_phase,
@@ -290,11 +259,11 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
         exit(1);
     }
 
+    // Wait for shuffle thread to finish
     sem_wait(&shuffle_sem);
+
     int key_count=0;
 
-
-    // Wait for shuffle thread to finish
     // Update the job state to the reduce phase
     current_state.stage = REDUCE_STAGE;
 
@@ -303,6 +272,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
     // an array to store all the context for each thread
     ThreadContext reduce_threads_context[multiThreadLevel];
+
     // TODO: check if need to run with the same threads from the map or create new as we did
 
     for (int i = 0; i < multiThreadLevel; ++i) {
@@ -324,9 +294,10 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
         }
     }
 
-
+    // Wait for the threads to finish
     curr_wait = {&reduce_threads, multiThreadLevel};
     waitForJob(&curr_wait);
+
 
     current_state.stage = UNDEFINED_STAGE;
     current_state.percentage = 100;
@@ -335,8 +306,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     pthread_mutex_destroy(&mutex);
     sem_destroy(&shuffle_sem);
     // TODO: CHECK WHAT TO send to this function
-
-    //    closeJobHandle(ShuffleContext);
+    closeJobHandle(&shuffle_context);
 
     // TODO: CHECK WHAT TO RETURN AND MAYBE CHANGE THE current_state variable
     return NULL;
