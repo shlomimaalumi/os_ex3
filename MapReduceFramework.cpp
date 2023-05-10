@@ -237,6 +237,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     // an array to store all the context for each thread
     ThreadContext reduce_threads_context[multiThreadLevel];
     // TODO: check if need to run with the same threads from the map or create new as we did
+
     for (int i = 0; i < multiThreadLevel; ++i) {
         reduce_threads_context[i] = {&client,
                                      &inputVec,
