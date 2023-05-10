@@ -3,8 +3,11 @@
 #include <semaphore.h>
 #include <cstdio>
 #include <atomic>
+#include <list>
+#include <numeric>
 #include <iostream>
 #include <algorithm>
+#include <queue>
 #include <vector>  //std::vector
 #include <utility> //std::pair
 
@@ -18,6 +21,7 @@ typedef struct ThreadContext {
     const MapReduceClient *client;
     const InputVec *input_vec;
     IntermediateVec *intermediate_vec;
+    ShuffledVec_t *shuffled_vec;
     OutputVec *output_vec;
     pthread_mutex_t *mutex;
     std::atomic<int> *atomicCounter;
@@ -103,8 +107,46 @@ void *map_phase(void *context) {
 }
 
 
-void shuffle_phase(ShuffleContext &context) {
+// ******************************************************************
+// *********************** shuffle phase function *******************
+// ******************************************************************
 
+void* shuffle_phase(void* context_t) {
+    ShuffleContext context= *((ShuffleContext*) context_t);
+
+    // create list [0...multiThreadLevel]
+    std::list<int> available_ind(context.multiThreadLevel);
+    std::iota(available_ind.begin(), available_ind.end(), 0);
+
+
+    std::pair<K2 *, V2 *> minlist[context.multiThreadLevel];
+    int min_lists_ind[context.multiThreadLevel];
+    for (int i = 0; i < context.multiThreadLevel; i++) {
+        minlist[i] = context.intermediate_vecs->at(i)[0];
+        min_lists_ind[i] = 0;
+    }
+    auto first_ind = min_key_ind(minlist, available_ind);
+    auto last = context.intermediate_vecs->at(first_ind).at(
+            min_lists_ind[first_ind]);
+    int queue_ind = 0;
+    while (not available_ind.empty()) {
+        // get the thread which we will take the pair from, and the pair
+        int min_ind = min_key_ind(minlist, available_ind);
+        auto pair = context.intermediate_vecs->at(min_ind).at(
+                min_lists_ind[min_ind]);;
+        if (not operatorEqual(last, pair)) {
+            queue_ind++;
+        }
+        context.queues[queue_ind].push(pair);
+
+        last = pair;
+        if (++min_lists_ind[min_ind] == context.intermediate_vecs[min_ind].size()) {
+            available_ind.remove(min_ind);
+        }
+    }
+//     Signal that we're done
+    sem_post(context.shuffle_sem);
+    return nullptr;
 }
 
 
@@ -181,6 +223,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
                                   &inputVec,
                                   &intermediateVectors[i],
                                   nullptr,
+                                  nullptr,
                                   &mutex,
                                   &atomicCounter,
                                   multiThreadLevel,
@@ -206,10 +249,14 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
             &mutex,
             &atomicCounter,
             &current_state,
-            &intermediateVectors};
+            &intermediateVectors,
+            &shuffle_sem,
+            queues,
+            multiThreadLevel};
 
     // NOW perform the shuffle phase:
-    shuffle_phase(shuffle_context);
+
+    ShuffledVec_t shuffled_vec;
 
      // create a new thread for the shuffle
     pthread_t shuffle_thread;
@@ -242,7 +289,8 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
         reduce_threads_context[i] = {&client,
                                      &inputVec,
                                      &intermediateVectors[i],
-                                     nullptr,
+                                     &shuffled_vec,
+                                     &outputVec,
                                      &mutex,
                                      &atomicCounter,
                                      multiThreadLevel,

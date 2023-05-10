@@ -3,5 +3,5 @@ project(ex3)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(ex3 Atomic/atomicdemo.cpp)
+add_executable(ex3 MapReduceFramework.cpp tests/test1.cpp)
 target_link_libraries(ex3 pthread)

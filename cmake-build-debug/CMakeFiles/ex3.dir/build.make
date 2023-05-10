@@ -57,30 +57,45 @@ include CMakeFiles/ex3.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ex3.dir/flags.make
 
-CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o: CMakeFiles/ex3.dir/flags.make
-CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o: ../Atomic/atomicdemo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o -c /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/Atomic/atomicdemo.cpp
+CMakeFiles/ex3.dir/MapReduceFramework.cpp.o: CMakeFiles/ex3.dir/flags.make
+CMakeFiles/ex3.dir/MapReduceFramework.cpp.o: ../MapReduceFramework.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ex3.dir/MapReduceFramework.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ex3.dir/MapReduceFramework.cpp.o -c /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.cpp
 
-CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/Atomic/atomicdemo.cpp > CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.i
+CMakeFiles/ex3.dir/MapReduceFramework.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex3.dir/MapReduceFramework.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.cpp > CMakeFiles/ex3.dir/MapReduceFramework.cpp.i
 
-CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/Atomic/atomicdemo.cpp -o CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.s
+CMakeFiles/ex3.dir/MapReduceFramework.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex3.dir/MapReduceFramework.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.cpp -o CMakeFiles/ex3.dir/MapReduceFramework.cpp.s
+
+CMakeFiles/ex3.dir/tests/test1.cpp.o: CMakeFiles/ex3.dir/flags.make
+CMakeFiles/ex3.dir/tests/test1.cpp.o: ../tests/test1.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ex3.dir/tests/test1.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ex3.dir/tests/test1.cpp.o -c /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp
+
+CMakeFiles/ex3.dir/tests/test1.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex3.dir/tests/test1.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp > CMakeFiles/ex3.dir/tests/test1.cpp.i
+
+CMakeFiles/ex3.dir/tests/test1.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex3.dir/tests/test1.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/tests/test1.cpp -o CMakeFiles/ex3.dir/tests/test1.cpp.s
 
 # Object files for target ex3
 ex3_OBJECTS = \
-"CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o"
+"CMakeFiles/ex3.dir/MapReduceFramework.cpp.o" \
+"CMakeFiles/ex3.dir/tests/test1.cpp.o"
 
 # External object files for target ex3
 ex3_EXTERNAL_OBJECTS =
 
-ex3: CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o
+ex3: CMakeFiles/ex3.dir/MapReduceFramework.cpp.o
+ex3: CMakeFiles/ex3.dir/tests/test1.cpp.o
 ex3: CMakeFiles/ex3.dir/build.make
 ex3: CMakeFiles/ex3.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ex3"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ex3"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ex3.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

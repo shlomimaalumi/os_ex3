@@ -6,11 +6,35 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/Atomic/atomicdemo.cpp
+/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceClient.h
+vector
+-
+utility
+-
+
+/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.cpp
+MapReduceFramework.h
+/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.h
 pthread.h
+-
+semaphore.h
 -
 cstdio
 -
 atomic
 -
+iostream
+-
+algorithm
+-
+queue
+-
+vector
+-
+utility
+-
+
+/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceFramework.h
+MapReduceClient.h
+/mnt/c/Users/shlom/OneDrive/Desktop/os/ex3/MapReduceClient.h
 

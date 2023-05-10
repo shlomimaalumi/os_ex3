@@ -123,32 +123,59 @@ ex3/fast:
 	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/build
 .PHONY : ex3/fast
 
-Atomic/atomicdemo.o: Atomic/atomicdemo.cpp.o
+MapReduceFramework.o: MapReduceFramework.cpp.o
 
-.PHONY : Atomic/atomicdemo.o
+.PHONY : MapReduceFramework.o
 
 # target to build an object file
-Atomic/atomicdemo.cpp.o:
-	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.o
-.PHONY : Atomic/atomicdemo.cpp.o
+MapReduceFramework.cpp.o:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/MapReduceFramework.cpp.o
+.PHONY : MapReduceFramework.cpp.o
 
-Atomic/atomicdemo.i: Atomic/atomicdemo.cpp.i
+MapReduceFramework.i: MapReduceFramework.cpp.i
 
-.PHONY : Atomic/atomicdemo.i
+.PHONY : MapReduceFramework.i
 
 # target to preprocess a source file
-Atomic/atomicdemo.cpp.i:
-	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.i
-.PHONY : Atomic/atomicdemo.cpp.i
+MapReduceFramework.cpp.i:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/MapReduceFramework.cpp.i
+.PHONY : MapReduceFramework.cpp.i
 
-Atomic/atomicdemo.s: Atomic/atomicdemo.cpp.s
+MapReduceFramework.s: MapReduceFramework.cpp.s
 
-.PHONY : Atomic/atomicdemo.s
+.PHONY : MapReduceFramework.s
 
 # target to generate assembly for a file
-Atomic/atomicdemo.cpp.s:
-	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/Atomic/atomicdemo.cpp.s
-.PHONY : Atomic/atomicdemo.cpp.s
+MapReduceFramework.cpp.s:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/MapReduceFramework.cpp.s
+.PHONY : MapReduceFramework.cpp.s
+
+tests/test1.o: tests/test1.cpp.o
+
+.PHONY : tests/test1.o
+
+# target to build an object file
+tests/test1.cpp.o:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/tests/test1.cpp.o
+.PHONY : tests/test1.cpp.o
+
+tests/test1.i: tests/test1.cpp.i
+
+.PHONY : tests/test1.i
+
+# target to preprocess a source file
+tests/test1.cpp.i:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/tests/test1.cpp.i
+.PHONY : tests/test1.cpp.i
+
+tests/test1.s: tests/test1.cpp.s
+
+.PHONY : tests/test1.s
+
+# target to generate assembly for a file
+tests/test1.cpp.s:
+	$(MAKE) -f CMakeFiles/ex3.dir/build.make CMakeFiles/ex3.dir/tests/test1.cpp.s
+.PHONY : tests/test1.cpp.s
 
 # Help Target
 help:
@@ -159,9 +186,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... ex3"
-	@echo "... Atomic/atomicdemo.o"
-	@echo "... Atomic/atomicdemo.i"
-	@echo "... Atomic/atomicdemo.s"
+	@echo "... MapReduceFramework.o"
+	@echo "... MapReduceFramework.i"
+	@echo "... MapReduceFramework.s"
+	@echo "... tests/test1.o"
+	@echo "... tests/test1.i"
+	@echo "... tests/test1.s"
 .PHONY : help
 
 
