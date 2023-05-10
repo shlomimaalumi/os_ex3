@@ -336,7 +336,7 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
     sem_destroy(&shuffle_sem);
     // TODO: CHECK WHAT TO send to this function
 
-    //    closeJobHandle();
+    //    closeJobHandle(ShuffleContext);
 
     // TODO: CHECK WHAT TO RETURN AND MAYBE CHANGE THE current_state variable
     return NULL;
