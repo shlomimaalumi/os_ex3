@@ -215,7 +215,9 @@ JobHandle startMapReduceJob(const MapReduceClient &client,
 
     // Free resources
     pthread_mutex_destroy(&mutex);
-    closeJobHandle();
+    // TODO: CHECK WHAT TO send to this function
+
+    //    closeJobHandle();
 
 
     // TODO: CHECK WHAT TO RETURN AND MAYBE CHANGE THE current_state variable
